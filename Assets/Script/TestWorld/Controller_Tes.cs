@@ -37,12 +37,9 @@ public class Controller_Tes : MonoBehaviour
 
 		if (controller.GetHairTriggerDown()) //트리거를 눌렀을 때
 		{
+			if (InputCubes[(int) ContCube.TriggerUD].material.color == Color.red)
+				InputCubes[(int) ContCube.TriggerUD].material.color = Color.white;
 			InputCubes[(int)ContCube.TriggerUD].material.color = Color.red;
-		}
-
-		if (controller.GetHairTriggerUp()) //트리거를 올렸을 때 
-		{
-			InputCubes[(int)ContCube.TriggerUD].material.color = Color.white;
 		}
 
 		if (controller.GetPress(SteamVR_Controller.ButtonMask.Grip))
@@ -56,12 +53,9 @@ public class Controller_Tes : MonoBehaviour
 
 		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
 		{
+			if (InputCubes[(int) ContCube.GripUD].material.color == Color.red)
+				InputCubes[(int) ContCube.GripUD].material.color = Color.white;
 			InputCubes[(int)ContCube.GripUD].material.color = Color.red;
-		}
-
-		if (controller.GetPressUp((SteamVR_Controller.ButtonMask.Grip)))
-		{
-			InputCubes[(int) ContCube.GripUD].material.color = Color.white;
 		}
 		
 		
