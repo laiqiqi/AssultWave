@@ -12,12 +12,16 @@ Shader "AW_Standard" {
 	    _Distance ("SoundDistance", float) = 0
 	    _RetainTime ("RetainTime", float) = 1
 	    [Toggle]_isRipple ("isRipple", float) = 0
+	    _SensitivityDepth("SensitivityDepth", Range(0,5)) = 3.75
+		_SensitivityNormals("SensitivityNormals", Range(0,5)) = 0.82
+		_SampleDistance("SampleDistance", Range(0,2)) = 1
+		_Falloff("Falloff", Range(0, 100)) = 10.0
 	}
 	SubShader {
 	    Tags { "RenderType" = "Opaque" }
             
         Pass{
-	        LOD 200   
+	        LOD 200
 	        CGPROGRAM
 	        
 	        #pragma vertex vert
@@ -57,6 +61,11 @@ Shader "AW_Standard" {
 	            return final;
 	        }
 	        
+	        float Time()
+	        {
+	            return _isRipple ? _Time.y/_RetainTime*0.4 : 1;
+	        }
+	        
 	        v2f vert(appdata i)
 	        {
 	            v2f o;
@@ -73,33 +82,34 @@ Shader "AW_Standard" {
 	        
 	        float4 frag(v2f i) : COLOR
 	        {
-	            float4 color = tex2D(_MainTex, i.uv)*_Color;
+	            float4 color = DarkColor(tex2D(_MainTex, i.uv)*_Color);
 	            float dist = distance(i.worldpos,_SoundPos);
 	            float4 black = float4(0, 0, 0, 1);
-	            float retain = 1;
+	            float4 fcolor=color;
 	            
 	            if(_isRipple)
 	            {
-	                if(dist <= _Distance && retain > 0)
+	                if(dist <= _Distance)
 	                {
-	                    retain -= _Time.y/_RetainTime;
-	                    //return color-(1-retain)-DarkColor(color) <= 0 ? DarkColor(color) : color-(1-retain);
-	                    return color;
+	                    fcolor.r -= color.r/1*Time();
+	                    fcolor.g -= color.g/1*Time();
+	                    fcolor.b -= color.b/1*Time();
+	                    return fcolor;
 	                }
 	                else
 	                {
-	                    return DarkColor(color);
+	                    return float4(0,0,0,1);
 	                }
 	            }
 	            else
 	            {
-	                return DarkColor(color);
+	                return float4(0,0,0,1);
 	            }
 	            
 	        }
 	        
-	        
 	        ENDCG
+	        
 	    }
 	    
 	}
