@@ -24,7 +24,7 @@ public class ShaderMgr : MonoBehaviour
 
     private void Start()
     {
-        //SoundOn(new Vector3(0, 0, 0), 1f, 3f);
+       // SoundOn(new Vector3(0, 0, 0), 3f, 3f);
     }
 
     public void SoundOn(Vector3 soundedpos, float distance, float retaintime)
@@ -39,7 +39,7 @@ public class ShaderMgr : MonoBehaviour
             SoundedObjs[i].GetComponent<MeshRenderer>().material.SetFloat(Shader_RetainName, retaintime);
             SoundedObjs[i].GetComponent<MeshRenderer>().material.SetFloat("_isRipple", 1);
         }
-        StartCoroutine(Retain(retaintime));
+        //StartCoroutine(Retain(retaintime));
     }
 
     public void SoundOff()

@@ -12,10 +12,7 @@ Shader "AW_Standard" {
 	    _Distance ("SoundDistance", float) = 0
 	    _RetainTime ("RetainTime", float) = 1
 	    [Toggle]_isRipple ("isRipple", float) = 0
-	    _SensitivityDepth("SensitivityDepth", Range(0,5)) = 3.75
-		_SensitivityNormals("SensitivityNormals", Range(0,5)) = 0.82
-		_SampleDistance("SampleDistance", Range(0,2)) = 1
-		_Falloff("Falloff", Range(0, 100)) = 10.0
+	    _EdgeWidth ("Edge Width", Range(0.01, 1)) = 0.2
 	}
 	SubShader {
 	    Tags { "RenderType" = "Opaque" }
@@ -34,6 +31,7 @@ Shader "AW_Standard" {
 	        uniform float _Darkness;
 	        uniform fixed4 _Color;
 	        uniform fixed4 _EdgeColor;
+	        uniform float _EdgeWidth;
 	        
 	        uniform float4 _SoundPos;
 	        uniform float _Distance;
@@ -84,17 +82,24 @@ Shader "AW_Standard" {
 	        {
 	            float4 color = DarkColor(tex2D(_MainTex, i.uv)*_Color);
 	            float dist = distance(i.worldpos,_SoundPos);
+	            float distance_Time = _Distance;
 	            float4 black = float4(0, 0, 0, 1);
-	            float4 fcolor=color;
+	            float4 fcolor=float4(1,1,1,1);
 	            
 	            if(_isRipple)
 	            {
-	                if(dist <= _Distance)
+	                //if(dist <= (_Distance - distance_Time) + _EdgeWidth / 2 && dist >= (_Distance - distance_Time) - _EdgeWidth / 2)
+	                if(dist <= (_Distance*Time()) + _EdgeWidth / 2 && dist >= (_Distance*Time()) - _EdgeWidth / 2)
 	                {
-	                    fcolor.r -= color.r/1*Time();
-	                    fcolor.g -= color.g/1*Time();
-	                    fcolor.b -= color.b/1*Time();
-	                    return fcolor;
+	                    if(distance_Time<=_Distance)
+	                    {
+	                        //distance_Time += _Distance / 1 * Time();
+	                    }
+	                    
+	                    //fcolor.r -= color.r/1*Time();
+	                    //fcolor.g -= color.g/1*Time();
+	                    //fcolor.b -= color.b/1*Time();
+	                    return float4(1,1,1,1);
 	                }
 	                else
 	                {
