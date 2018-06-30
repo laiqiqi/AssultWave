@@ -61,7 +61,7 @@ Shader "AW_Standard" {
 	        
 	        float Time()
 	        {
-	            return _isRipple ? _Time.y/_RetainTime*0.4 : 1;
+	            return _isRipple ? _Time.y/_RetainTime*0.8 : 1;
 	        }
 	        
 	        v2f vert(appdata i)
@@ -89,7 +89,7 @@ Shader "AW_Standard" {
 	            if(_isRipple)
 	            {
 	                //if(dist <= (_Distance - distance_Time) + _EdgeWidth / 2 && dist >= (_Distance - distance_Time) - _EdgeWidth / 2)
-	                if(dist <= (_Distance*Time()) + _EdgeWidth / 2 && dist >= (_Distance*Time()) - _EdgeWidth / 2)
+	                if(dist <= (_Distance*Time()-_Distance) + _EdgeWidth / 2 && dist >= (_Distance*Time()-_Distance) - _EdgeWidth / 2)
 	                {
 	                    if(distance_Time<=_Distance)
 	                    {
